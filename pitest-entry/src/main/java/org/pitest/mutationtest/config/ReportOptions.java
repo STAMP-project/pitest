@@ -124,8 +124,18 @@ public class ReportOptions {
   private Properties                     properties;
 
   private int maxSurvivors;
-  
+
   private Collection<String>             excludedRunners                = new ArrayList<String>();
+
+  private boolean                        buildMatrix                    = false;
+
+  public boolean shouldBuildMatrix() {
+    return this.buildMatrix;
+  }
+
+  public void boolean setBuildMatrix(final boolean buildMatrix) {
+    this.buildMatrix = buildMatrix;
+  }
 
   public boolean isVerbose() {
     return this.verbose;
@@ -549,11 +559,11 @@ public class ReportOptions {
   public int getMaximumAllowedSurvivors() {
     return maxSurvivors;
   }
-  
+
   public void setMaximumAllowedSurvivors(int maxSurvivors) {
     this.maxSurvivors = maxSurvivors;
   }
-  
+
   public Collection<String> getExcludedRunners() {
     return excludedRunners;
   }
@@ -586,7 +596,10 @@ public class ReportOptions {
         + ", coverageThreshold=" + coverageThreshold + ", mutationEngine="
         + mutationEngine + ", javaExecutable=" + javaExecutable
         + ", includeLaunchClasspath=" + includeLaunchClasspath
-        + ", properties=" + properties + ", maxSurvivors=" + maxSurvivors + ", excludedRunners=" + excludedRunners + "]";
+        + ", properties=" + properties + ", maxSurvivors=" + maxSurvivors
+        + ", excludedRunners=" + excludedRunners
+        + ", buildMatrix=" + buildMatrix
+        + "]";
   }
-  
+
 }
