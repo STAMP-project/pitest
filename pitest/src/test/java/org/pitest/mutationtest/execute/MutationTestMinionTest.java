@@ -59,7 +59,7 @@ public class MutationTestMinionTest {
     this.tests = new ArrayList<ClassName>();
 
     this.args = new MinionArguments(this.mutations, this.tests, this.engine,
-        this.timeoutStrategy, false, this.testConfig);
+        this.timeoutStrategy, false, this.testConfig, false);
 
     when(this.is.read(MinionArguments.class)).thenReturn(this.args);
     when(this.engine.createMutator(any(ClassByteArraySource.class)))

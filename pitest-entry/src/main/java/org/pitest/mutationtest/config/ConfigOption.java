@@ -188,7 +188,12 @@ public enum ConfigOption {
   /**
    * Custom properties for plugins
    */
-  PLUGIN_CONFIGURATION("pluginConfiguration");
+  PLUGIN_CONFIGURATION("pluginConfiguration"),
+
+  /**
+   * Runs all relevant tests should be run even if a failing test is found
+   */
+  BUILD_MATRIX("buildMatrix", false);
 
   private final String       text;
   private final Serializable defaultValue;

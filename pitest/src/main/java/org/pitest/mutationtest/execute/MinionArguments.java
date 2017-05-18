@@ -30,21 +30,27 @@ public class MinionArguments {
   final TimeoutLengthStrategy       timeoutStrategy;
   final boolean                     verbose;
   final Configuration               pitConfig;
+  final boolean                     buildMatrix;
 
   public MinionArguments(final Collection<MutationDetails> mutations,
       final Collection<ClassName> tests, final MutationEngine engine,
       final TimeoutLengthStrategy timeoutStrategy, final boolean verbose,
-      final Configuration pitConfig) {
+      final Configuration pitConfig, boolean buildMatrix) {
     this.mutations = mutations;
     this.testClasses = tests;
     this.engine = engine;
     this.timeoutStrategy = timeoutStrategy;
     this.verbose = verbose;
     this.pitConfig = pitConfig;
+    this.buildMatrix = buildMatrix;
   }
 
   public boolean isVerbose() {
     return this.verbose;
+  }
+
+  public boolean shouldBuildMatrix() {
+    return  this.buildMatrix;
   }
 
 }

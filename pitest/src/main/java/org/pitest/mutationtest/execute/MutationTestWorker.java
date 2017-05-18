@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 import org.pitest.classinfo.ClassName;
 import org.pitest.classpath.ClassPath;
 import org.pitest.functional.F3;
@@ -57,13 +58,15 @@ public class MutationTestWorker {
   private final Mutater                                     mutater;
   private final ClassLoader                                 loader;
   private final F3<ClassName, ClassLoader, byte[], Boolean> hotswap;
+  private final boolean buildMatrix;
 
   public MutationTestWorker(
       final F3<ClassName, ClassLoader, byte[], Boolean> hotswap,
-      final Mutater mutater, final ClassLoader loader) {
+      final Mutater mutater, final ClassLoader loader, boolean buildMatrix) {
     this.loader = loader;
     this.mutater = mutater;
     this.hotswap = hotswap;
+    this.buildMatrix = buildMatrix;
   }
 
   protected void run(final Collection<MutationDetails> range, final Reporter r,
@@ -139,7 +142,7 @@ public class MutationTestWorker {
     }
 
     final ClassLoader activeloader = pickClassLoaderForMutant(mutationId);
-    final Container c = createNewContainer(activeloader);
+    final Container c = buildMatrix ? createMatrixContainer(activeloader) : createNewContainer(activeloader);
     final long t0 = System.currentTimeMillis();
     if (this.hotswap.apply(mutationId.getClassName(), activeloader,
         mutatedClass.getBytes())) {
@@ -168,6 +171,17 @@ public class MutationTestWorker {
       }
     };
     return c;
+  }
+
+  private static Container createMatrixContainer(final ClassLoader activeloader) {
+    return new UnContainer() {
+      @Override
+      public List<TestResult> execute(final TestUnit group) {
+        List<TestResult> results = new ArrayList<TestResult>();
+        group.execute(activeloader, new ConcreteResultCollector(results));
+        return results;
+      }
+    };
   }
 
   private ClassLoader pickClassLoaderForMutant(final MutationDetails mutant) {
@@ -205,10 +219,9 @@ public class MutationTestWorker {
 
   private MutationStatusTestPair createStatusTestPair(
       final CheckTestHasFailedResultListener listener) {
-    if (listener.lastFailingTest().hasSome()) {
-      return new MutationStatusTestPair(listener.getNumberOfTestsRun(),
-          listener.status(), listener.lastFailingTest().value()
-              .getQualifiedName());
+    List<String> failingTests = listener.getFailingtestNames();
+    if (failingTests.size() > 0) {
+      return new MutationStatusTestPair(listener.getNumberOfTestsRun(), listener.status(), failingTests.get(0), failingTests);
     } else {
       return new MutationStatusTestPair(listener.getNumberOfTestsRun(),
           listener.status());

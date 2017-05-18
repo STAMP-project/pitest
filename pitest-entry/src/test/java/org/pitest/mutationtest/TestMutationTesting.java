@@ -381,7 +381,7 @@ public class TestMutationTesting {
         coverageOptions.getPitConfig(), mutationConfig,
         new PercentAndConstantTimeoutStrategy(data.getTimeoutFactor(),
             data.getTimeoutConstant()), data.isVerbose(), data.getClassPath()
-            .getLocalClassPath());
+            .getLocalClassPath(), false);
 
     final MutationTestBuilder builder = new MutationTestBuilder(wf,
         new NullAnalyser(), source, new DefaultGrouper(0));

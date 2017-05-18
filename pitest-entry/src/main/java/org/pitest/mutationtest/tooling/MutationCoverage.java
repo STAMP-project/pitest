@@ -266,7 +266,7 @@ private int numberOfThreads() {
         .getConfiguration(), mutationConfig,
         new PercentAndConstantTimeoutStrategy(this.data.getTimeoutFactor(),
             this.data.getTimeoutConstant()), this.data.isVerbose(), this.data
-            .getClassPath().getLocalClassPath());
+            .getClassPath().getLocalClassPath(), data.shouldBuildMatrix());
 
     MutationGrouper grouper = this.settings.getMutationGrouper().makeFactory(
         this.data.getFreeFormProperties(), this.code,

@@ -16,11 +16,16 @@ package org.pitest.mutationtest;
 
 import org.pitest.functional.Option;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public final class MutationStatusTestPair {
 
   private final int             numberOfTestsRun;
   private final DetectionStatus status;
   private final Option<String>  killingTest;
+  private final List<String>    failingTests = new ArrayList<String>();
 
   public MutationStatusTestPair(final int numberOfTestsRun,
       final DetectionStatus status) {
@@ -34,6 +39,14 @@ public final class MutationStatusTestPair {
     this.numberOfTestsRun = numberOfTestsRun;
   }
 
+  public MutationStatusTestPair(final int numberOfTestsRun,
+                                final DetectionStatus status,
+                                final String killingTest,
+                                final List<String> failingTests) {
+    this(numberOfTestsRun, status, killingTest);
+    this.failingTests.addAll(failingTests);
+  }
+
   public DetectionStatus getStatus() {
     return this.status;
   }
@@ -44,6 +57,10 @@ public final class MutationStatusTestPair {
 
   public int getNumberOfTestsRun() {
     return this.numberOfTestsRun;
+  }
+
+  public List<String> getFailingTests() {
+    return Collections.unmodifiableList(failingTests);
   }
 
   @Override

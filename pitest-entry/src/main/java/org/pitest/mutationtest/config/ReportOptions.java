@@ -133,7 +133,7 @@ public class ReportOptions {
     return this.buildMatrix;
   }
 
-  public void boolean setBuildMatrix(final boolean buildMatrix) {
+  public void setBuildMatrix(final boolean buildMatrix) {
     this.buildMatrix = buildMatrix;
   }
 

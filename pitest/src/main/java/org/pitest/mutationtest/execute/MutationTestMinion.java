@@ -75,7 +75,7 @@ public class MutationTestMinion {
           byteSource);
       
       final MutationTestWorker worker = new MutationTestWorker(hotswap,
-          paramsFromParent.engine.createMutator(byteSource), loader);
+          paramsFromParent.engine.createMutator(byteSource), loader, paramsFromParent.buildMatrix);
 
       final List<TestUnit> tests = findTestsForTestClasses(loader,
           paramsFromParent.testClasses, paramsFromParent.pitConfig);

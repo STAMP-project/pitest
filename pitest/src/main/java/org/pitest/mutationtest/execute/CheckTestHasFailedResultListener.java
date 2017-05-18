@@ -20,14 +20,19 @@ import org.pitest.testapi.Description;
 import org.pitest.testapi.TestListener;
 import org.pitest.testapi.TestResult;
 
+import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
+
 public class CheckTestHasFailedResultListener implements TestListener {
 
-  private Option<Description> lastFailingTest = Option.none();
-  private int                 testsRun        = 0;
+  private List<Description> failingTests = new ArrayList<Description>();
+
+  private int testsRun = 0;
 
   @Override
   public void onTestFailure(final TestResult tr) {
-    this.lastFailingTest = Option.some(tr.getDescription());
+    this.failingTests.add(tr.getDescription());
   }
 
   @Override
@@ -46,15 +51,35 @@ public class CheckTestHasFailedResultListener implements TestListener {
   }
 
   public DetectionStatus status() {
-    if (this.lastFailingTest.hasSome()) {
+    if (failingTests.size() > 0) {
       return DetectionStatus.KILLED;
     } else {
       return DetectionStatus.SURVIVED;
     }
   }
 
+  public List<Description> getFailingTests() {
+    return Collections.unmodifiableList(failingTests);
+  }
+
+  public List<String> getFailingtestNames() {
+    ArrayList<String> result = new ArrayList<String>(failingTests.size());
+    for (Description desc
+            : failingTests) {
+      result.add(desc.getQualifiedName());
+    }
+    return result;
+  }
+
   public Option<Description> lastFailingTest() {
-    return this.lastFailingTest;
+    if (failingTests.isEmpty()) {
+      return Option.none();
+    }
+    return Option.some(failingTests.get(failingTests.size() - 1));
+  }
+
+  public boolean hasFailingTests() {
+    return failingTests.size() > 0;
   }
 
   public int getNumberOfTestsRun() {
